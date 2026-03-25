@@ -1,9 +1,9 @@
+'use client';
+
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CountUp from "@/components/CountUp";
 
@@ -19,6 +19,7 @@ import noodlesImg from "@/assets/dish-garden-noodles.jpg";
 import mapoImg from "@/assets/dish-garden-mapo.jpg";
 import springrollsImg from "@/assets/dish-garden-springrolls.jpg";
 import soupImg from "@/assets/dish-garden-soup.jpg";
+import Link from "next/link";
 
 const signatureDishes = [
   { name: "Peking Duck", image: duckImg, tag: "Chef's Special", description: "Crispy golden skin, carved tableside with pancakes and hoisin" },
@@ -86,6 +87,7 @@ const Index = () => {
   const [testimonialIdx, setTestimonialIdx] = useState(0);
   const [activeMenuCat, setActiveMenuCat] = useState("starters");
   const [ambienceIdx, setAmbienceIdx] = useState(0);
+  // @ts-expect-error setInterval return type differs across runtime targets.
   const testimonialInterval = useRef<ReturnType<typeof setInterval>>();
 
   useEffect(() => {
@@ -100,7 +102,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
 
       {/* ═══ HERO ═══ */}
       <section className="relative h-screen">
@@ -108,7 +109,7 @@ const Index = () => {
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-[2000ms]"
             style={{
-              backgroundImage: `url(${heroImage})`,
+              backgroundImage: `url(${heroImage.src})`,
               backgroundAttachment: 'fixed',
               transform: heroLoaded ? "scale(1)" : "scale(1.08)",
             }}
@@ -121,7 +122,7 @@ const Index = () => {
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-secondary/15 rounded-full steam-particle"
+              className="absolute w-1 h-1 bg-secondary rounded-full steam-particle"
               style={{
                 left: `${25 + i * 12}%`,
                 bottom: "30%",
@@ -150,12 +151,12 @@ const Index = () => {
                 Authentic flavors. Timeless tradition.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/reservations">
+                <Link href="/reservations">
                   <Button className="btn-primary-premium text-base px-10 py-4">
                     Book a Table
                   </Button>
                 </Link>
-                <Link to="/menu">
+                <Link href="/menu">
                   <Button className="border-2 border-white/40 text-white font-medium rounded-md px-10 py-4 hover:bg-white/10 transition-all duration-300 text-base">
                     Explore Menu
                   </Button>
@@ -216,7 +217,7 @@ const Index = () => {
                 <div className="group card-food">
                   <div className="relative overflow-hidden aspect-[4/3]">
                     <img
-                      src={dish.image}
+                      src={dish.image.src}
                       alt={dish.name}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       loading="lazy"
@@ -248,7 +249,7 @@ const Index = () => {
             <ScrollReveal>
               <div className="relative rounded-lg overflow-hidden aspect-[4/3] border border-border shadow-sm">
                 <img
-                  src={kitchenImage}
+                  src={kitchenImage.src}
                   alt="Our kitchen"
                   className="w-full h-full object-cover"
                   loading="lazy"
@@ -267,7 +268,7 @@ const Index = () => {
                   Culinary Excellence
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-12">
-                  Our master chefs bring decades of experience from China's most celebrated regions,
+                  Our master chefs bring decades of experience from China&apos;s most celebrated regions,
                   blending ancient techniques with heartfelt presentation.
                 </p>
                 <div className="grid grid-cols-2 gap-10">
@@ -309,7 +310,7 @@ const Index = () => {
               <ScrollReveal key={i} delay={i * 100}>
                 <div className="relative rounded-lg overflow-hidden aspect-[4/3] group border border-border shadow-sm">
                   <img
-                    src={img}
+                    src={img.src}
                     alt={`Restaurant ambience ${i + 1}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
@@ -324,7 +325,7 @@ const Index = () => {
           <div className="md:hidden relative">
             <div className="rounded-lg overflow-hidden aspect-[4/3] border border-border shadow-sm">
               <img
-                src={ambienceImages[ambienceIdx]}
+                src={ambienceImages[ambienceIdx]?.src}
                 alt="Restaurant ambience"
                 className="w-full h-full object-cover transition-all duration-700"
               />
@@ -401,7 +402,7 @@ const Index = () => {
                       </span>
                       {dish.special && (
                         <span className="ml-2 text-[10px] uppercase tracking-widest text-secondary font-semibold">
-                          Chef's Pick
+                          Chef&apos;s Pick
                         </span>
                       )}
                       <span className="menu-dots" />
@@ -417,7 +418,7 @@ const Index = () => {
           </div>
 
           <div className="text-center mt-14">
-            <Link to="/menu">
+            <Link href="/menu">
               <Button className="btn-outline-premium">View Full Menu</Button>
             </Link>
           </div>
@@ -451,7 +452,7 @@ const Index = () => {
                         ))}
                       </div>
                       <p className="text-foreground/90 leading-relaxed italic mb-5 font-serif-display text-lg">
-                        "{t.review}"
+                        &ldquo;{t.review}&rdquo;
                       </p>
                       <p className="text-muted-foreground text-sm font-medium tracking-wide">
                         — {t.name}
@@ -481,7 +482,7 @@ const Index = () => {
       <section className="relative py-28 md:py-36 px-4 overflow-hidden z-10">
         <div
           className="absolute inset-0 bg-cover bg-center bg-fixed"
-          style={{ backgroundImage: `url(${ctaImage})` }}
+          style={{ backgroundImage: `url(${ctaImage.src})` }}
         />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative max-w-2xl mx-auto text-center">
@@ -497,7 +498,7 @@ const Index = () => {
               <br />
               and flavors that stay with you
             </p>
-            <Link to="/reservations">
+            <Link href="/reservations">
               <Button className="btn-primary-premium text-lg px-12 py-5">
                 Book Your Table
               </Button>
@@ -506,7 +507,6 @@ const Index = () => {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 };
