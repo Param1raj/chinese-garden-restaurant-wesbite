@@ -11,9 +11,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon, Clock, Users, Utensils } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { toast } from "sonner";
+import emailjs from '@emailjs/browser';
 
 const Reservations = () => {
   const [date, setDate] = useState<Date>();
@@ -35,6 +35,30 @@ const Reservations = () => {
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+  const sendEmail = () => {
+    emailjs.send(
+      process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID!,
+      process.env.NEXT_PUBLIC_RESERVE_TABLE_TEMPLATE_ID!,
+      {...formData, date: format(date??'', "PPP")},
+      { publicKey: process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY }
+    ).then(() => {
+      toast.success("Reservation Confirmed! 🎉",{
+        description: `Thank you ${formData.name}! Your table for ${formData.guests} on ${format(date??'', "PPP")} at ${formData.time} has been confirmed.`,
+      });
+      setFormData({
+        name: "",
+        email: "",
+        requests: "",
+        phone:"",
+        guests:"",
+        time:"",
+      });
+      setDate(undefined);
+      }, (error) => {
+        console.log('error', error);
+        toast.error("Failed to send Message❗️");
+      });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,26 +69,14 @@ const Reservations = () => {
     }
 
     // Simulate booking confirmation
-    toast("Reservation Confirmed! 🎉",{
-      description: `Thank you ${formData.name}! Your table for ${formData.guests} on ${format(date, "PPP")} at ${formData.time} has been confirmed.`,
-    });
-
-    // Reset form
-    setDate(undefined);
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      guests: "",
-      time: "",
-      requests: "",
-    });
+    
+    sendEmail()
   };
 
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <section className="pt-24 pb-12 bg-gradient-to-b from-card to-background">
+      <section className="pt-34 pb-12 bg-gradient-to-b from-card to-background">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <ScrollReveal>
             <h1 className="heading-section">Reserve Your Table</h1>
@@ -132,9 +144,9 @@ const Reservations = () => {
                         <SelectTrigger className="mt-1">
                           <SelectValue placeholder="Select party size" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white rounded-sm">
                           {[1,2,3,4,5,6,7,8].map(num => (
-                            <SelectItem key={num} value={num.toString()}>
+                            <SelectItem className="rounded-sm" key={num} value={num.toString()}>
                               {num} {num === 1 ? "Guest" : "Guests"}
                             </SelectItem>
                           ))}
@@ -166,7 +178,7 @@ const Reservations = () => {
                             onSelect={setDate}
                             disabled={(date) => date < new Date()}
                             initialFocus
-                            className="p-3 pointer-events-auto"
+                            className="p-3 pointer-events-auto bg-white!"
                           />
                         </PopoverContent>
                       </Popover>
@@ -178,7 +190,7 @@ const Reservations = () => {
                         <SelectTrigger className="mt-1">
                           <SelectValue placeholder="Select time" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-white">
                           {timeSlots.map(time => (
                             <SelectItem key={time} value={time}>{time}</SelectItem>
                           ))}

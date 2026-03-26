@@ -6,9 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
-import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { toast } from "sonner";
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +22,29 @@ const Contact = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const sendEmail = () => {
+    emailjs.send(
+      process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID!,
+      process.env.NEXT_PUBLIC_CONTACT_US_TEMPLATE_ID!,
+      formData,
+      { publicKey: process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY }
+    ).then(() => {
+      toast.success("Message Sent! 📧",{
+        description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+      });
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+      }, (error) => {
+        console.log('error', error);
+         toast.error("Failed to send Message❗️");
+      });
+  };
+
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -29,25 +52,13 @@ const Contact = () => {
       toast.error("Please fill in all fields");
       return;
     }
-
-    // Simulate message sending
-    toast.success("Message Sent! 📧",{
-      description: "Thank you for contacting us. We'll get back to you within 24 hours.",
-    });
-
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+    sendEmail();
   };
 
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <section className="pt-24 pb-12 bg-gradient-to-b from-card to-background">
+      <section className="pt-34 pb-12 bg-gradient-to-b from-card to-background">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <ScrollReveal>
             <h1 className="heading-section">Contact Us</h1>

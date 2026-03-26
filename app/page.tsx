@@ -21,6 +21,13 @@ import mapoImg from "@/assets/dish-garden-mapo.jpg";
 import springrollsImg from "@/assets/dish-garden-springrolls.jpg";
 import soupImg from "@/assets/dish-garden-soup.jpg";
 import Link from "next/link";
+import riceImg from "@/assets/dish-garden-rice.jpg";
+import { Dish, MenuItem } from "@/components/menu/menu-item";
+
+interface MenuData {
+  label: string;
+  items: Dish[]
+}
 
 const signatureDishes = [
   { name: "Peking Duck", image: duckImg, tag: "Chef's Special", description: "Crispy golden skin, carved tableside with pancakes and hoisin" },
@@ -31,40 +38,43 @@ const signatureDishes = [
   { name: "Wonton Soup", image: soupImg, tag: "Comforting", description: "Delicate wontons in a clear golden broth" },
 ];
 
-const menuData = {
+const menuData: Record<string, MenuData> = {
   starters: {
     label: "Starters",
     items: [
-      { name: "Golden Spring Rolls", price: "$12", desc: "Crispy vegetable rolls with sweet chili dip" },
-      { name: "Wonton Soup", price: "$10", desc: "Delicate pork wontons in clear broth" },
-      { name: "Prawn Toast", price: "$14", desc: "Sesame-crusted shrimp on golden bread", special: true },
-      { name: "Salt & Pepper Squid", price: "$15", desc: "Lightly dusted with Sichuan spice" },
+      { name: "Golden Spring Rolls", price: "$12", description: "Crispy vegetable rolls with sweet chili dip", image: springrollsImg.src, isVegetarian: true },
+      { name: "Wonton Soup", price: "$10", description: "Delicate pork wontons in clear golden broth", image: soupImg.src },
+      { name: "Prawn Toast", price: "$14", description: "Sesame-crusted shrimp on golden bread", image: dimsumImg.src, isSpecial: true },
+      { name: "Salt & Pepper Squid", price: "$15", description: "Lightly dusted with Sichuan spice", image: springrollsImg.src, isSpicy: true },
+      { name: "Pork Dumplings (8 pcs)", price: "$16", description: "Steamed dumplings with premium pork filling", image: dimsumImg.src },
     ],
   },
   noodles: {
     label: "Noodles",
     items: [
-      { name: "Hand-Pulled Noodles", price: "$18", desc: "In rich slow-simmered beef broth", special: true },
-      { name: "Dan Dan Noodles", price: "$16", desc: "Spicy sesame peanut sauce" },
-      { name: "Chow Mein", price: "$15", desc: "Wok-tossed with seasonal vegetables" },
-      { name: "Singapore Noodles", price: "$17", desc: "Curry-spiced rice vermicelli" },
+      { name: "Hand-Pulled Noodles", price: "$18", description: "In rich slow-simmered beef broth", image: noodlesImg.src, isSpecial: true },
+      { name: "Dan Dan Noodles", price: "$16", description: "Spicy sesame peanut sauce", image: noodlesImg.src, isSpicy: true },
+      { name: "Chow Mein", price: "$15", description: "Wok-tossed with seasonal vegetables", image: noodlesImg.src, isVegetarian: true },
+      { name: "Singapore Noodles", price: "$17", description: "Curry-spiced rice vermicelli", image: noodlesImg.src, isSpicy: true },
+      { name: "Beef Lo Mein", price: "$20", description: "Soft noodles with tender beef and vegetables", image: noodlesImg.src },
     ],
   },
   rice: {
     label: "Rice Dishes",
     items: [
-      { name: "Yangzhou Fried Rice", price: "$15", desc: "Char siu, shrimp, and egg" },
-      { name: "Claypot Rice", price: "$18", desc: "Slow-cooked with Chinese sausage", special: true },
-      { name: "Steamed Jasmine Rice", price: "$5", desc: "Fragrant long-grain" },
+      { name: "Yangzhou Fried Rice", price: "$15", description: "Char siu, shrimp, and egg", image: riceImg.src },
+      { name: "Claypot Rice", price: "$18", description: "Slow-cooked with Chinese sausage", image: riceImg.src, isSpecial: true },
+      { name: "Vegetarian Fried Rice", price: "$16", description: "Wok-fried rice with mixed vegetables and tofu", image: riceImg.src, isVegetarian: true },
+      { name: "Steamed Jasmine Rice", price: "$5", description: "Fragrant long-grain", image: riceImg.src },
     ],
   },
-  specials: {
+   specials: {
     label: "Chef's Specials",
     items: [
-      { name: "Peking Duck", price: "$38", desc: "Whole roasted, carved tableside", special: true },
-      { name: "Kung Pao Chicken", price: "$22", desc: "Peanuts, dried chili, Sichuan pepper" },
-      { name: "Mapo Tofu", price: "$15", desc: "Fiery silken tofu in chili bean sauce" },
-      { name: "Sweet & Sour Pork", price: "$20", desc: "Crispy battered with tangy glaze" },
+      { name: "Peking Duck", price: "$38", description: "Whole roasted, carved tableside with pancakes", image: duckImg.src, isSpecial: true },
+      { name: "Kung Pao Chicken", price: "$22", description: "Peanuts, dried chili, Sichuan pepper", image: mapoImg.src, isSpicy: true },
+      { name: "Mapo Tofu", price: "$15", description: "Fiery silken tofu in chili bean sauce", image: mapoImg.src, isSpicy: true, isVegetarian: true },
+      { name: "Sweet & Sour Pork", price: "$20", description: "Crispy battered with tangy glaze", image: springrollsImg.src },
     ],
   },
 };
@@ -466,29 +476,7 @@ const Index = () => {
 
           {/* Menu items — list style */}
           <div className="space-y-0">
-            {currentMenu.items.map((dish, i) => (
-              <ScrollReveal key={dish.name} delay={i * 60}>
-                <div className="menu-list-item border-b border-border/40 relative">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-baseline">
-                      <span className="text-foreground font-medium text-base">
-                        {dish.name}
-                      </span>
-                      {dish.special && (
-                        <span className="ml-2 text-[10px] uppercase tracking-widest text-secondary font-semibold">
-                          Chef's Pick
-                        </span>
-                      )}
-                      <span className="menu-dots" />
-                      <span className="text-primary font-semibold font-serif-display text-lg">
-                        {dish.price}
-                      </span>
-                    </div>
-                    <p className="text-muted-foreground text-sm mt-0.5">{dish.desc}</p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
+            {currentMenu.items.map((dish, i) => <MenuItem dish={dish} index={i} />)}
           </div>
 
           <div className="text-center mt-14">
