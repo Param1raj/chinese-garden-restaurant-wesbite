@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { toast } from "sonner";
@@ -47,15 +46,13 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
-      
       {/* Header */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-card to-background">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <ScrollReveal>
             <h1 className="heading-section">Contact Us</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We'd love to hear from you. Get in touch with any questions, feedback, or special requests.
+              We&apos;d love to hear from you. Get in touch with any questions, feedback, or special requests.
             </p>
           </ScrollReveal>
         </div>
@@ -242,7 +239,7 @@ const Contact = () => {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

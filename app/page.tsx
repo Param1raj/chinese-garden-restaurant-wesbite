@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
+import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CountUp from "@/components/CountUp";
 
-import heroImage from "@/assets/hero-dining-warm.jpg";
+import heroImage from "@/assets/hero-cinematic-1.jpg";
 import kitchenImage from "@/assets/kitchen-wok.jpg";
 import amb1 from "@/assets/ambience-garden-1.jpg";
 import amb2 from "@/assets/ambience-garden-2.jpg";
@@ -87,7 +88,8 @@ const Index = () => {
   const [testimonialIdx, setTestimonialIdx] = useState(0);
   const [activeMenuCat, setActiveMenuCat] = useState("starters");
   const [ambienceIdx, setAmbienceIdx] = useState(0);
-  // @ts-expect-error setInterval return type differs across runtime targets.
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  // @ts-ignore
   const testimonialInterval = useRef<ReturnType<typeof setInterval>>();
 
   useEffect(() => {
@@ -98,72 +100,144 @@ const Index = () => {
     return () => clearInterval(testimonialInterval.current);
   }, []);
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { width, height } = currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: (clientX / width - 0.5) * 20,
+      y: (clientY / height - 0.5) * 20,
+    });
+  };
+
   const currentMenu = menuData[activeMenuCat as keyof typeof menuData];
 
   return (
     <div className="min-h-screen bg-background">
+      {/* <Navigation /> */}
 
-      {/* ═══ HERO ═══ */}
-      <section className="relative h-screen">
-        <div className="sticky top-0 h-screen overflow-hidden">
+      {/* ═══ CINEMATIC HERO ═══ */}
+      <section
+        className="relative h-screen overflow-hidden"
+        onMouseMove={handleMouseMove}
+      >
+        {/* Background with slow zoom + parallax */}
+        <div
+          className="absolute inset-0 hero-bg-zoom"
+          style={{
+            transform: `scale(1.05) translate(${mousePos.x * 0.3}px, ${mousePos.y * 0.3}px)`,
+          }}
+        >
+          <img
+            src={heroImage.src}
+            alt="Premium Chinese dining spread"
+            className="w-full h-full object-cover"
+            width={1920}
+            height={1080}
+          />
+        </div>
+
+        {/* Dark cinematic overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+
+        {/* Warm ambient glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/5" />
+
+        {/* Steam particles */}
+        {[...Array(8)].map((_, i) => (
           <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-[2000ms]"
+            key={i}
+            className="absolute rounded-full steam-float"
             style={{
-              backgroundImage: `url(${heroImage.src})`,
-              backgroundAttachment: 'fixed',
-              transform: heroLoaded ? "scale(1)" : "scale(1.08)",
+              left: `${20 + i * 8}%`,
+              bottom: "15%",
+              width: `${3 + (i % 3) * 2}px`,
+              height: `${3 + (i % 3) * 2}px`,
+              background: `radial-gradient(circle, hsla(40, 80%, 70%, 0.3), transparent)`,
+              animationDelay: `${i * 0.6}s`,
+              animationDuration: `${3 + i * 0.5}s`,
             }}
           />
-          {/* Minimal warm overlay — keeps image rich */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-background/90" />
-          <div className="absolute inset-0 bg-primary/5" />
+        ))}
 
-          {/* Steam particles */}
-          {[...Array(5)].map((_, i) => (
+        {/* Left-aligned content */}
+        <div className="absolute inset-0 flex items-center">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
             <div
-              key={i}
-              className="absolute w-1 h-1 bg-secondary rounded-full steam-particle"
-              style={{
-                left: `${25 + i * 12}%`,
-                bottom: "30%",
-                animationDelay: `${i * 0.8}s`,
-                animationDuration: `${3 + i * 0.6}s`,
-              }}
-            />
-          ))}
-
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div
-              className={`text-center max-w-3xl mx-auto px-6 transition-all duration-1000 ease-out ${
-                heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              className={`max-w-2xl transition-all duration-1000 ease-out ${
+                heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
             >
-              <div className="ornament-divider mb-8">
-                <span className="text-secondary text-lg lantern-glow">🏮</span>
+              {/* Since badge */}
+              <div
+                className={`inline-flex items-center gap-2 mb-8 transition-all duration-1000 delay-200 ${
+                  heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                }`}
+              >
+                <span className="text-secondary/80 text-sm tracking-[0.3em] uppercase font-medium">
+                  Est. 1998 · Authentic Chinese Cuisine
+                </span>
               </div>
 
-              <h1 className="heading-hero text-white mb-5">
-                Welcome to
+              <h1 className="heading-hero text-white mb-4" style={{ textShadow: '0 4px 30px rgba(0,0,0,0.5)' }}>
+                Chinese
                 <br />
-                <span className="text-primary-foreground" style={{ textShadow: '0 2px 20px hsl(0 65% 38% / 0.4)' }}>Chinese Garden</span>
+                <span className="text-primary" style={{ textShadow: '0 2px 40px hsl(0 70% 50% / 0.4)' }}>
+                  Garden
+                </span>
               </h1>
-              <p className="text-lg md:text-xl text-white/80 mb-12 max-w-md mx-auto font-light" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.3)' }}>
-                Authentic flavors. Timeless tradition.
+
+              <p
+                className={`text-lg md:text-xl text-white/70 mb-10 max-w-md font-light leading-relaxed transition-all duration-1000 delay-300 ${
+                  heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                }`}
+                style={{ textShadow: '0 1px 8px rgba(0,0,0,0.4)' }}
+              >
+                Authentic Chinese Dining Experience
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+              {/* CTAs */}
+              <div
+                className={`flex flex-col sm:flex-row gap-4 mb-10 transition-all duration-1000 delay-500 ${
+                  heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                }`}
+              >
                 <Link href="/reservations">
-                  <Button className="btn-primary-premium text-base px-10 py-4">
+                  <Button className="btn-glow-primary text-base">
                     Book a Table
                   </Button>
                 </Link>
                 <Link href="/menu">
-                  <Button className="border-2 border-white/40 text-white font-medium rounded-md px-10 py-4 hover:bg-white/10 transition-all duration-300 text-base">
+                  <Button className="btn-glass text-base">
                     Explore Menu
                   </Button>
                 </Link>
               </div>
+
+              {/* Rating badge */}
+              <div
+                className={`inline-flex items-center gap-3 px-5 py-3 rounded-full transition-all duration-1000 delay-700 ${
+                  heroLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                }`}
+                style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={14} className="fill-secondary text-secondary" />
+                  ))}
+                </div>
+                <span className="text-white/90 text-sm font-medium">4.8</span>
+                <span className="text-white/40">|</span>
+                <span className="text-white/60 text-sm">2000+ happy diners</span>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-indicator">
+          <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Scroll</span>
+          <div className="w-px h-8 bg-gradient-to-b from-white/40 to-transparent" />
         </div>
       </section>
 
@@ -268,7 +342,7 @@ const Index = () => {
                   Culinary Excellence
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-12">
-                  Our master chefs bring decades of experience from China&apos;s most celebrated regions,
+                  Our master chefs bring decades of experience from China's most celebrated regions,
                   blending ancient techniques with heartfelt presentation.
                 </p>
                 <div className="grid grid-cols-2 gap-10">
@@ -402,7 +476,7 @@ const Index = () => {
                       </span>
                       {dish.special && (
                         <span className="ml-2 text-[10px] uppercase tracking-widest text-secondary font-semibold">
-                          Chef&apos;s Pick
+                          Chef's Pick
                         </span>
                       )}
                       <span className="menu-dots" />
@@ -452,7 +526,7 @@ const Index = () => {
                         ))}
                       </div>
                       <p className="text-foreground/90 leading-relaxed italic mb-5 font-serif-display text-lg">
-                        &ldquo;{t.review}&rdquo;
+                        "{t.review}"
                       </p>
                       <p className="text-muted-foreground text-sm font-medium tracking-wide">
                         — {t.name}
@@ -507,6 +581,7 @@ const Index = () => {
         </div>
       </section>
 
+      {/* <Footer /> */}
     </div>
   );
 };

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
+import Image from "next/image";
 
 import duckImg from "@/assets/dish-garden-duck.jpg";
 import dimsumImg from "@/assets/dish-garden-dimsum.jpg";
@@ -13,6 +13,7 @@ import mapoImg from "@/assets/dish-garden-mapo.jpg";
 import springrollsImg from "@/assets/dish-garden-springrolls.jpg";
 import soupImg from "@/assets/dish-garden-soup.jpg";
 import riceImg from "@/assets/dish-garden-rice.jpg";
+import menuHeroImage from "@/assets/hero-dumplings.jpg";
 
 interface MenuItem {
   name: string;
@@ -93,17 +94,26 @@ const Menu = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-
       {/* Header */}
-      <section className="pt-28 pb-10 bg-parchment">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <section className="relative flex min-h-[55vh] items-center justify-center overflow-hidden px-4 pt-28 pb-16">
+        <Image
+          src={menuHeroImage}
+          alt="Fresh dumplings arranged for service"
+          fill
+          priority
+          quality={92}
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-black/58" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/72 to-transparent" />
+        <div className="relative mx-auto max-w-4xl text-center">
           <ScrollReveal>
-            <p className="text-sm uppercase tracking-[0.25em] text-secondary mb-3 font-medium">
+            <p className="mb-3 text-sm font-medium uppercase tracking-[0.25em] text-secondary">
               Chinese Garden
             </p>
-            <h1 className="heading-section text-foreground">Our Menu</h1>
-            <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+            <h1 className="heading-hero mb-5 text-white">Our Menu</h1>
+            <p className="mx-auto max-w-2xl text-lg text-white/82 md:text-xl">
               Authentic dishes prepared with traditional techniques and the finest ingredients
             </p>
           </ScrollReveal>
@@ -170,7 +180,7 @@ const Menu = () => {
                         </span>
                         {dish.isSpecial && (
                           <span className="text-[10px] uppercase tracking-widest text-secondary font-semibold">
-                            Chef's Pick
+                            Chef&apos;s Pick
                           </span>
                         )}
                         {dish.isSpicy && (
@@ -213,7 +223,7 @@ const Menu = () => {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

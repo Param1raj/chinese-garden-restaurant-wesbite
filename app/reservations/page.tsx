@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { CalendarIcon, Clock, Users, Utensils } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import { toast } from "sonner";
@@ -62,15 +63,13 @@ const Reservations = () => {
 
   return (
     <div className="min-h-screen">
-      <Navigation />
-      
       {/* Header */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-card to-background">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <ScrollReveal>
             <h1 className="heading-section">Reserve Your Table</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Book your dining experience at Dragon Palace. We're excited to welcome you for an unforgettable evening.
+              Book your dining experience at Chinese Garden. We&apos;re excited to welcome you for an unforgettable evening.
             </p>
           </ScrollReveal>
         </div>
@@ -261,7 +260,7 @@ const Reservations = () => {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

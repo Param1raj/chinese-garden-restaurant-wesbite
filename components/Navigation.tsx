@@ -28,7 +28,8 @@ const Navigation = () => {
   ];
 
   const isActive = (path: string) => location === path;
-  const showSurface = scrolled || isOpen;
+  const supportsTransparentNav = location === "/" || location === "/about" || location === "/menu";
+  const showSurface = scrolled || isOpen || !supportsTransparentNav;
 
   return (
     <nav
@@ -61,7 +62,7 @@ const Navigation = () => {
                   "nav-link transition-colors duration-300",
                   showSurface ? "text-foreground/70 hover:text-primary" : "text-white/80 hover:text-white",
                   isActive(item.path) && "active",
-                  !showSurface && isActive(item.path) && "text-white after:w-full"
+                  supportsTransparentNav && !scrolled && isActive(item.path) && "text-white after:w-full"
                 )}
               >
                 {item.name}

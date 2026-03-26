@@ -1,4 +1,3 @@
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
 import lanternsImage from "@/assets/lanterns-bg.jpg";
@@ -7,12 +6,10 @@ import chefImage from "@/assets/chef-portrait.jpg";
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-
       {/* Hero */}
       <section
         className="relative h-[70vh] min-h-[450px] flex items-center justify-center bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: `url(${lanternsImage})` }}
+        style={{ backgroundImage: `url(${lanternsImage.src})` }}
       >
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative text-center max-w-4xl mx-auto px-4">
@@ -91,8 +88,8 @@ const About = () => {
                     and the belief that every dish should tell a story.
                   </p>
                   <div className="border-l-4 border-primary pl-6 italic">
-                    "Cooking is an art form that speaks to the soul. When you taste our food,
-                    you should feel the love and dedication that goes into every dish."
+                    &ldquo;Cooking is an art form that speaks to the soul. When you taste our food,
+                    you should feel the love and dedication that goes into every dish.&rdquo;
                     <br />
                     <span className="text-primary font-medium not-italic">— Master Chef Li Wei</span>
                   </div>
@@ -135,7 +132,7 @@ const About = () => {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
