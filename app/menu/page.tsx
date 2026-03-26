@@ -95,7 +95,7 @@ const Menu = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <section className="relative flex min-h-[55vh] items-center justify-center overflow-hidden px-4 pt-28 pb-16">
+      <section className="relative flex min-h-[75vh] items-center justify-center overflow-hidden px-4 pt-28 pb-16">
         <Image
           src={menuHeroImage}
           alt="Fresh dumplings arranged for service"

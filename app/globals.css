@@ -126,7 +126,7 @@
 
   /* Typography */
   .font-serif-display {
-    font-family: 'Noto Serif SC', Georgia, serif;
+    font-family: 'Playfair Display', 'Noto Serif SC', 'Georgia', serif;
   }
 
   /* Buttons */
@@ -183,7 +183,14 @@
     border-color: hsl(var(--secondary) / 0.3);
   }
 
-  /* Navigation */
+  .fade-in {
+    @apply opacity-0 translate-y-6 transition-all duration-700 ease-out;
+  }
+
+  .fade-in.in-view {
+    @apply opacity-100 translate-y-0;
+  }
+
   .nav-link {
     position: relative;
     color: hsl(var(--foreground) / 0.7);
@@ -221,21 +228,18 @@
 
   /* Headings */
   .heading-hero {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 700;
-    line-height: 1.1;
-    font-family: 'Noto Serif SC', Georgia, serif;
-    text-shadow: 0 2px 12px hsl(var(--foreground) / 0.15);
+    @apply text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight;
+    font-family: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
+    letter-spacing: -0.02em;
   }
 
   .heading-section {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    font-family: 'Noto Serif SC', Georgia, serif;
+    @apply text-3xl md:text-4xl font-bold mb-6 tracking-tight;
+    font-family: 'Playfair Display', 'Noto Serif SC', Georgia, serif;
+    letter-spacing: -0.01em;
   }
 
-  /* Divider */
+  /* Cultural decorative divider */
   .ornament-divider {
     display: flex;
     align-items: center;
@@ -252,57 +256,115 @@
     background: hsl(var(--primary) / 0.3);
   }
 
-  /* Backgrounds */
+  /* Parchment texture background */
   .bg-parchment {
     background-color: hsl(var(--parchment));
-    background-image:
-      radial-gradient(circle at 20% 50%, hsl(var(--secondary) / 0.06), transparent),
-      radial-gradient(circle at 80% 50%, hsl(var(--primary) / 0.04), transparent);
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, hsl(var(--secondary) / 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 50%, hsl(var(--primary) / 0.04) 0%, transparent 50%);
   }
 
   .bg-parchment-deep {
     background-color: hsl(var(--parchment-deep));
-    background-image:
-      radial-gradient(circle at 30% 40%, hsl(var(--secondary) / 0.08), transparent),
-      radial-gradient(circle at 70% 60%, hsl(var(--primary) / 0.05), transparent);
+    background-image: 
+      radial-gradient(ellipse at 30% 40%, hsl(var(--secondary) / 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, hsl(var(--primary) / 0.05) 0%, transparent 50%);
   }
 
-  /* Menu */
+  /* Menu list item */
   .menu-list-item {
-    display: flex;
-    align-items: baseline;
-    padding: 1rem 0;
-    transition: all 0.3s;
+    @apply flex items-baseline py-4 cursor-default;
+    @apply transition-all duration-300;
   }
 
   .menu-list-item:hover {
-    padding-left: 0.5rem;
+    @apply pl-2;
   }
 
-  .menu-dots {
-    flex: 1;
-    margin: 0 0.75rem;
-    border-bottom: 1px dotted hsl(var(--muted-foreground) / 0.2);
+  .menu-list-item .menu-dots {
+    @apply flex-1 mx-3 border-b border-dotted border-muted-foreground/20;
+    min-width: 2rem;
   }
 
-  /* Animations */
   @keyframes float-steam {
-    0%, 100% { opacity: 0; transform: translateY(0); }
-    50% { opacity: 0.6; transform: translateY(-40px); }
+    0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+    10% { opacity: 0.15; }
+    50% { transform: translateY(-40px) translateX(8px) scale(1.2); opacity: 0.08; }
+    90% { opacity: 0.02; }
   }
 
   .steam-particle {
     animation: float-steam 4s ease-in-out infinite;
   }
 
-   @keyframes float-up {
+  @keyframes lantern-glow {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .lantern-glow {
+    animation: lantern-glow 3s ease-in-out infinite;
+  }
+
+  @keyframes count-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes hero-zoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+  }
+
+  .hero-bg-zoom {
+    animation: hero-zoom 20s ease-in-out alternate infinite;
+  }
+
+  @keyframes float-up {
     0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-    15% { opacity: 0.8; }
-    50% { transform: translateY(-80px) translateX(10px) scale(1.5); opacity: 0.4; }
-    100% { transform: translateY(-160px) translateX(-5px) scale(0.9); opacity: 0; }
+    15% { opacity: 0.4; }
+    50% { transform: translateY(-80px) translateX(10px) scale(1.3); opacity: 0.15; }
+    100% { transform: translateY(-160px) translateX(-5px) scale(0.8); opacity: 0; }
   }
 
   .steam-float {
     animation: float-up 4s ease-out infinite;
+  }
+
+  .btn-glow-primary {
+    @apply relative overflow-hidden bg-primary text-primary-foreground font-semibold rounded-md px-10 py-4;
+    @apply transition-all duration-500;
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3), 0 0 60px hsl(var(--primary) / 0.1);
+  }
+  .btn-glow-primary:hover {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.5), 0 0 80px hsl(var(--primary) / 0.2);
+    @apply brightness-110 -translate-y-0.5;
+  }
+
+  .btn-glass {
+    @apply border border-white/20 text-white font-medium rounded-md px-10 py-4;
+    @apply transition-all duration-500;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+  }
+  .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.35);
+    @apply -translate-y-0.5;
+  }
+
+  .nav-glassmorphism {
+    background: hsl(var(--background) / 0.6);
+    backdrop-filter: blur(20px) saturate(1.4);
+    border-bottom: 1px solid hsl(var(--border) / 0.3);
+  }
+
+  @keyframes scroll-indicator {
+    0%, 100% { transform: translateY(0); opacity: 0.6; }
+    50% { transform: translateY(8px); opacity: 1; }
+  }
+
+  .scroll-indicator {
+    animation: scroll-indicator 2s ease-in-out infinite;
   }
 }
